@@ -65,7 +65,14 @@ mypy "${PYFILES[@]}" \
 
 echo
 echo "== pytest =="
-if [ -d tests ] || compgen -G 'test_*.py' >/dev/null || compgen -G '*_test.py' >/dev/null; then
+has_tests=0
+if compgen -G 'test_*.py' >/dev/null || compgen -G '*_test.py' >/dev/null; then
+    has_tests=1
+fi
+if [ -d tests ] && find tests -type f \( -name 'test_*.py' -o -name '*_test.py' \) -print -quit | grep -q .; then
+    has_tests=1
+fi
+if [ "$has_tests" -eq 1 ]; then
     pytest -q
 else
     echo "Sem testes encontrados — pulando pytest."
