@@ -1,1 +1,1 @@
-"""Leitura e validação dos arquivos de mapa."""
+"""Parsing and validation of map files."""

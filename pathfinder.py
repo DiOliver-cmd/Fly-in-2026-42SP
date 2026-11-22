@@ -1,1 +1,1 @@
-"""Busca de caminhos no espaço-tempo."""
+"""Space-time pathfinding."""

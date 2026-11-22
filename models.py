@@ -1,1 +1,1 @@
-"""Modelos de domínio: zonas, conexões, drones e rede."""
+"""Domain models: zones, connections, drones and network."""

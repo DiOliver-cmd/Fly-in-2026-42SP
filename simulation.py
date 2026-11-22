@@ -1,1 +1,1 @@
-"""Simulação do tráfego e das restrições de capacidade."""
+"""Traffic simulation and capacity constraints."""

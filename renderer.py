@@ -1,1 +1,1 @@
-"""Representação visual do mapa e da simulação no terminal."""
+"""Terminal visualization of the map and simulation."""

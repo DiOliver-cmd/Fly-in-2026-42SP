@@ -1,1 +1,1 @@
-"""Grafo próprio e algoritmos de alcançabilidade (BFS)."""
+"""Custom graph and reachability algorithms (BFS)."""
