@@ -1,0 +1,46 @@
+# Referência em português do Makefile do projeto Fly-In.
+# Uso (a partir da raiz do repositório):
+#   make -f Guias/Makefile.pt-BR <alvo>
+#
+# Os nomes dos alvos, variáveis e comandos permanecem em inglês para manter
+# a fidelidade técnica com o subject. Apenas os comentários estão em português.
+#
+# Variáveis:
+#   PYTHON  interpretador usado (padrão: python3)
+#   MAP     mapa passado para run/debug (padrão: maps/easy/01_linear_path.txt)
+
+.PHONY: install run debug test clean lint lint-strict
+
+PYTHON ?= python3
+MAP ?= maps/easy/01_linear_path.txt
+
+# Instala as dependências de desenvolvimento.
+install:
+	$(PYTHON) -m pip install flake8 mypy pytest
+
+# Executa o simulador no mapa indicado por MAP.
+run:
+	$(PYTHON) fly_in.py $(MAP)
+
+# Executa o simulador sob o depurador pdb.
+debug:
+	$(PYTHON) -m pdb fly_in.py $(MAP)
+
+# Roda a suíte de testes.
+test:
+	$(PYTHON) -m pytest -q
+
+# Remove caches gerados por Python, mypy e pytest.
+clean:
+	rm -rf __pycache__ .mypy_cache .pytest_cache tests/__pycache__
+
+# Checagem padrão: flake8 + mypy com as flags do subject.
+lint:
+	flake8 .
+	mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports \
+	       --disallow-untyped-defs --check-untyped-defs
+
+# Checagem rígida: flake8 + mypy --strict.
+lint-strict:
+	flake8 .
+	mypy . --strict
