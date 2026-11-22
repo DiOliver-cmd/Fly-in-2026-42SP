@@ -3,14 +3,54 @@
 > Base teórica para **entender, implementar e defender** o projeto **Fly-In**.
 > Explicação em português; termos técnicos e nomes de campos do subject em inglês.
 >
-> **Foco:** apenas a **parte mandatória**. Bônus (visual, challenger) aparece só
-> quando ajuda a explicar o modelo. **Nenhuma fonte da Wikipedia foi utilizada** —
-> todas as referências são acadêmicas, documentação oficial ou artigos técnicos.
+> **Foco:** a **parte mandatória** do subject oficial **v2.0**. O único bônus é o
+> mapa Challenger (43 turnos). **Nenhuma fonte da Wikipedia foi utilizada** — todas
+> as referências são acadêmicas, documentação oficial ou artigos técnicos.
 >
-> **Ressalva:** o PDF oficial do subject no intra retornou HTTP 403. Os requisitos
-> foram reconstruídos a partir de `Guias/ORIENTACAO.md`, `Guias/TAREFAS_MANDATORIO.md`,
-> do pacote `maps.tar.gz` e de implementações de referência. **Antes da defesa**,
-> confirme cada item contra o PDF oficial aberto com sua conta do intra.
+> **Fonte:** subject oficial **Fly-In v2.0** (texto fornecido nesta sessão),
+> reconciliado com `Guias/ORIENTACAO.md` e `Guias/TAREFAS_MANDATORIO.md`.
+
+---
+
+## 0. Restrições do subject v2.0 (bloqueantes e obrigatórias)
+
+O subject trata alguns itens como **blocking conditions** (reprovação direta):
+
+- **Python 3.10+**.
+- **Proibido** usar bibliotecas de lógica de grafo (`networkx`, `graphlib`, …).
+  O grafo deve ser implementado à mão (listas/dicionários de adjacência).
+- **Projeto completamente orientado a objetos** — demonstrado na defesa.
+- **`flake8` limpo** e **`mypy` sem erros**, com as flags:
+  `--warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs`.
+- **Type hints** e **docstrings** PEP 257.
+- **Exceções tratadas** + **context managers**; nenhum crash não tratado.
+
+Demais obrigações do mandatório:
+
+- **Parser** + validação; detecção de grafo desconectado (não é erro de parsing,
+  mas deve ser reportado sem crash/loop).
+- **Simulation engine** + **pathfinding** minimizando turnos.
+- **Representação visual OBRIGATÓRIA** (terminal colorido e/ou GUI).
+- **Saída** no formato exigido (uma linha por turno).
+- **`Makefile`** (`install/run/debug/clean/lint`, `lint-strict` opcional) e
+  **`README.md`** em inglês com todos os campos.
+
+### 0.1 Correção vs. otimização e pontuação
+
+- **Corretude é avaliada separadamente** do número de turnos; velocidade não reprova.
+- Alvos são os **ótimos** da tabela (não há faixa easy/medium/hard):
+  4, 4, 4, 8, 10, 6, 13, 16, 26 e Challenger **43**.
+- Pontuação: mapa roda corretamente → pontos por ficar **≤ 25% do ótimo** →
+  mais pontos por atingir o **ótimo exato**.
+- **Único bônus:** Challenger em **43 turnos**.
+
+### 0.2 Formato de saída (reforço)
+
+- Uma linha por turno; movimentos separados por espaço.
+- `D<ID>-<zone>` para chegada; `D<ID>-<conexão>` para drone **em trânsito** rumo a
+  zona `restricted`, onde a conexão é identificada pelos dois extremos
+  (`D1-a-b`, ordem canônica). O subject ilustra com `D1-restrictedConn`.
+- Drones parados são omitidos; entregues não são mais rastreados.
 
 ---
 
@@ -536,10 +576,25 @@ A mesma entrada deve produzir a **mesma** saída. Para isso:
 (`https://docs.python.org/3/library/enum.html`), `heapq`
 (`https://docs.python.org/3/library/heapq.html`).
 
+### 11.5 Saída e representação visual (obrigatórias)
+
+- **Saída:** uma linha por turno; `D<ID>-<zone>` na chegada e `D<ID>-<conexão>`
+  durante o trânsito para `restricted` (conexão pelos dois extremos, ordem
+  canônica). Drones parados/entregues são omitidos.
+- **Representação visual (obrigatória):** terminal colorido (ANSI, usando
+  `color=`; qualquer palavra é aceita) **e/ou** interface gráfica. A camada visual
+  lê os turnos já calculados e **não** influencia a simulação; ao redirecionar a
+  saída, mantenha o texto limpo (sem ANSI) para preservar o formato exigido.
+- **README:** documentar os recursos visuais e como melhoram a experiência.
+
 ---
 
 ## 12. Checklist de conceitos para dominar
 
+- [ ] Python 3.10+, **design OO** e **nenhuma biblioteca de grafo** (`networkx`,
+      `graphlib`) — requisitos bloqueantes.
+- [ ] `flake8`/`mypy` limpos, type hints e docstrings PEP 257.
+- [ ] Representação **visual obrigatória** (terminal colorido e/ou GUI).
 - [ ] Grafo: vértice, aresta, grafo conexo, ciclo, direcionado vs não direcionado.
 - [ ] Lista de adjacência `O(V + E)` vs matriz `O(V²)`.
 - [ ] BFS: fila, camadas, `O(V+E)`, reconstrução de caminho, alcançabilidade.
@@ -657,16 +712,19 @@ A mesma entrada deve produzir a **mesma** saída. Para isso:
 
 **Verificado:**
 
-- `Guias/ORIENTACAO.md` e `Guias/TAREFAS_MANDATORIO.md` existem.
+- Subject oficial **Fly-In v2.0** recebido e reconciliado com os três guias.
+- `Guias/ORIENTACAO.md`, `Guias/TAREFAS_MANDATORIO.md` e este arquivo existem.
 - `maps.tar.gz` contém 9 mapas mandatórios + challenger.
 - Challenger: 25 drones, 54 zonas, 70 conexões.
-- Caminho mais curto do challenger: 19 turnos.
-- Gargalo `final_torture2`: `max_drones=1`.
-- Lower bound: 43; README do pacote: 45.
+- Caminho mais curto do challenger: 19 turnos; gargalo `final_torture2`
+  (`max_drones=1`); ótimo `19 + 24 = 43`.
+- Representação **visual** é **mandatória**; **OO** e **ausência de libs de grafo**
+  são bloqueantes.
 - PDFs de Silver, Stern, CBS e PBS localizados.
 
 **Pendências:**
 
-- Confirmar o PDF oficial do subject no intra e ajustar qualquer divergência.
 - Validar os números de makespan **rodando os mapas**, não apenas confiando nos
   READMEs de referência.
+- Lembrar que **mapas de avaliação podem diferir** dos fornecidos e que pode haver
+  **modificação ao vivo**; treinar ambos.
