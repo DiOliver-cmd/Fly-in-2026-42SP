@@ -1,1 +1,1 @@
-"""Formatação da saída no formato exigido pelo subject."""
+"""Output formatting required by the subject."""

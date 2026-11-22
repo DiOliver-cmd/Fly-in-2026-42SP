@@ -1,1 +1,1 @@
-"""Ponto de entrada do simulador Fly-In."""
+"""Entry point for the Fly-In simulator."""
